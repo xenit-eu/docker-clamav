@@ -10,4 +10,5 @@ createDockerFile {
 
 dockerBuild {
     repositories = ['docker.io/xenit/clamav']
+    tags = autotag.legacyTags()
 }
