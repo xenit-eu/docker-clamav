@@ -1,5 +1,6 @@
 plugins {
     id 'eu.xenit.docker' version '5.3.2'
+    id 'be.vbgn.ci-detect' version '0.5.0'
 }
 
 createDockerFile {
@@ -10,12 +11,21 @@ createDockerFile {
 
 dockerBuild {
     repositories = ['docker.io/xenit/clamav']
-    tags = autotag.legacyTags()
+    tags = generateImageTags()
 }
 
 docker {
     registryCredentials {
-        username = System.getenv("DOCKER_USER")
-        password = System.getenv("DOCKER_PASSWORD")
+        username = System.getenv('DOCKER_USER')
+        password = System.getenv('DOCKER_PASSWORD')
     }
+}
+
+def generateImageTags() {
+    String timestamp = new Date().format('yyyyMMddHHmmss')
+
+    String branch = ci.reference ?: 'local'
+    if (!branch.startsWithAny('master', 'main'))
+        return [branch + '-' + timestamp]
+    return [timestamp]
 }
