@@ -1,0 +1,28 @@
+name: 'Continuous Integration'
+on: [ push, pull_request ]
+jobs:
+  PublishImage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: temurin
+      - name: Build docker image
+        uses: gradle/gradle-build-action@v2.3.0
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        with:
+          arguments: :buildDockerImage
+      - name: Publish docker image
+        if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+        uses: gradle/gradle-build-action@v2.3.0
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        with:
+          arguments: :pushDockerImage

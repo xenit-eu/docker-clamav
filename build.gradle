@@ -12,3 +12,10 @@ dockerBuild {
     repositories = ['docker.io/xenit/clamav']
     tags = autotag.legacyTags()
 }
+
+docker {
+    registryCredentials {
+        username = System.getenv("DOCKER_USER")
+        password = System.getenv("DOCKER_PASSWORD")
+    }
+}
