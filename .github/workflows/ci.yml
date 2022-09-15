@@ -13,15 +13,12 @@ jobs:
           distribution: temurin
       - name: Build docker image
         uses: gradle/gradle-build-action@v2.3.0
-        env:
-          BUILD_NUMBER: ${{ github.run_number }}
         with:
           arguments: :buildDockerImage
       - name: Publish docker image
         if: ${{ startsWith(github.ref, 'refs/heads/main') }}
         uses: gradle/gradle-build-action@v2.3.0
         env:
-          BUILD_NUMBER: ${{ github.run_number }}
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         with:
