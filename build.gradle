@@ -24,7 +24,7 @@ docker {
 def generateImageTags() {
     String timestamp = new Date().format('yyyyMMddHHmmss')
 
-    String branch = ci.reference ?: 'local'
+    String branch = ci.reference ?: 'test'
     if (!branch.startsWithAny('master', 'main'))
         // Replace all non-alphanumeric characters by '_' to sanitize for image tag
         return [branch.replaceAll('\\W', '_') + '-' + timestamp]
