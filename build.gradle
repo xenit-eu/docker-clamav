@@ -5,7 +5,7 @@ plugins {
 
 createDockerFile {
     var configFile = 'image/clamd.conf'
-    from 'docker.io/clamav/clamav:0.105.1'
+    from 'docker.io/clamav/clamav:1.4.3'
     smartCopy configFile, '/etc/clamav/'
 }
 
